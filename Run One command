@@ -10,21 +10,17 @@ sleep 1 ; echo -e ".\n" ; sleep 1 ; echo -e "..\n" ; sleep 1 ; echo -e "...\n"
 sudo nmap -sV -O -Pn ./NmapIps.txt -p $port -T3 --min-rate 8000 | grep -E 'Nmap scan|PORT|/tcp|/udp|Service' > ./NmapServices.txt 
 echo -e "\nOne moment please..."
 sleep 1 ; echo -e ".\n" ; sleep 1 ; echo -e "..\n" ; sleep 1 ; echo -e "...\n"
-
-echo -e "\nPlease enter an IP address / Range of IPs. Ex. XXX.XXX.XXX.XXX/X"
-read IP
-echo -e "\nPlease enter what ports you want to scan. Ex. X-X,X,X-X"
-read port
 echo -e "\nOne moment please..."
-sudo nmap -sV -O  $IP -p $port -T3 --min-rate 8000 |  grep -E 'Nmap scan|PORT|/tcp|/udp|Service' > ./NmapServices.txt 
 sleep 1 ; echo -e ".\n" ; sleep 1 ; echo -e "..\n" ; sleep 1 ; echo -e "...\n"
-echo -e "\nPrinted to $(find ~+ -name '*Services.txt')\n"
 
+while read line; do
+if (( $line -match '^Nmap scan*' )); then
+sed -i -e 's/^/\\n/' $line
+fi
+done < ./NmapServices.txt
 
 
 echo -e "\nThank you for your time !\n"
 break
 
 done
-
-
